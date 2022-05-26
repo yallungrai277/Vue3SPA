@@ -1,6 +1,5 @@
-import AppIndex from "../pages/public/Index.vue";
-
 import Guest from "../layouts/Guest.vue";
+import AppIndex from "../pages/public/Index.vue";
 
 export default [
     {

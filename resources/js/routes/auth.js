@@ -1,11 +1,12 @@
+import Guest from "@/layouts/Guest.vue";
+import { guest } from "./guards";
+
 import Login from "@/pages/auth/Login.vue";
 import Register from "@/pages/auth/Register.vue";
 import VerifyEmail from "@/pages/auth/VerifyEmail.vue";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import EmailVerify from "@/pages/auth/EmailVerify";
 import ForgotPassword from "@/pages/auth/ForgotPassword.vue";
-
-import Guest from "@/layouts/Guest.vue";
 
 export default [
     {
@@ -16,6 +17,7 @@ export default [
             layout: Guest,
             title: "Login",
         },
+        beforeEnter: [guest],
     },
     {
         path: "/signup",
@@ -25,6 +27,7 @@ export default [
             layout: Guest,
             title: "Sign Up",
         },
+        beforeEnter: [guest],
     },
     {
         path: "/forgot-passord",
@@ -34,6 +37,7 @@ export default [
             layout: Guest,
             title: "Forgot Password",
         },
+        beforeEnter: [guest],
     },
     {
         path: "/verify-email",
@@ -43,6 +47,7 @@ export default [
             layout: Guest,
             title: "Verify Email",
         },
+        beforeEnter: [guest],
     },
     {
         path: "/verify-email/:token",
@@ -52,6 +57,7 @@ export default [
             layout: Guest,
             title: "Verify Email",
         },
+        beforeEnter: [guest],
     },
     {
         path: "/reset-password/:token",
@@ -61,5 +67,6 @@ export default [
             layout: Guest,
             title: "Reset Password",
         },
+        beforeEnter: [guest],
     },
 ];

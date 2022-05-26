@@ -1,8 +1,9 @@
+import { authenticated } from "./guards";
+import Authenticated from "@/layouts/Authenticated.vue";
+
 import PostsIndex from "@/pages/posts/Index";
 import PostsCreate from "@/pages/posts/Create";
 import PostsEdit from "@/pages/posts/Edit";
-
-import Authenticated from "@/layouts/Authenticated.vue";
 
 export default [
     {
@@ -13,6 +14,7 @@ export default [
             layout: Authenticated,
             title: "Posts",
         },
+        beforeEnter: [authenticated],
     },
     {
         path: "/posts/create",
@@ -22,6 +24,7 @@ export default [
             layout: Authenticated,
             title: "Create Post",
         },
+        beforeEnter: [authenticated],
     },
     {
         path: "/posts/edit/:id",
@@ -31,5 +34,6 @@ export default [
             layout: Authenticated,
             title: "Edit Post",
         },
+        beforeEnter: [authenticated],
     },
 ];

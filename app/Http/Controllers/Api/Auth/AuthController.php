@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\AuthToken;
 use Illuminate\Http\Request;
 use App\Helpers\AuthTokenHelper;
-use App\Helpers\RateLimitingValidationHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Auth\LoginRequest;
@@ -103,6 +102,14 @@ class AuthController extends Controller
         $authToken->user->save();
         $authToken->delete();
         return response()->json(['status' => true], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json([
+            'status' => true
+        ], 200);
     }
 
     public function me(Request $request)

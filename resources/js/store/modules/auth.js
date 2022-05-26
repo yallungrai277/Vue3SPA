@@ -1,6 +1,7 @@
 import _ from "lodash";
 import router from "@/routes";
 import { setBearerToken } from "@/helpers";
+import axios from "axios";
 
 // initial state
 const state = () => ({
@@ -17,6 +18,13 @@ const getters = {
     },
     isSubmitting(state) {
         return state.isSubmitting;
+    },
+    user(state) {
+        return state.user;
+    },
+    authenticated(state) {
+        if (state.authToken && state.user != null) return true;
+        return false;
     },
 };
 
@@ -77,6 +85,26 @@ const actions = {
             if (err?.response?.status == 422 && err?.response?.data?.errors) {
                 commit("SET_VALIDATION_ERRORS", err.response.data.errors);
             }
+            throw err;
+        }
+        return;
+    },
+
+    async logout({ commit, state, dispatch }) {
+        if (state.isSubmitting) return;
+        commit("SET_SUBMITTING", true);
+        try {
+            await axios.post("api/auth/logout");
+            commit("SET_SUBMITTING", false);
+            dispatch("clearAuth");
+
+            router.push({ name: "login" });
+        } catch (err) {
+            commit("SET_SUBMITTING", false);
+            swal({
+                icon: "error",
+                title: "Some errors occured and we could not log you out.",
+            });
             throw err;
         }
         return;

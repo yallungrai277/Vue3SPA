@@ -81,6 +81,26 @@ const { isSubmitting, user } = useGetters({
               >
                 Create Post
               </router-link>
+              <router-link
+                :to="{ name: 'rolePermissions.index' }"
+                active-class="border-b-2 border-indigo-400"
+                class="
+                  inline-flex
+                  items-center
+                  px-1
+                  pt-1
+                  text-sm
+                  font-medium
+                  leading-5
+                  text-gray-900
+                  focus:outline-none focus:border-indigo-700
+                  transition
+                  duration-150
+                  ease-in-out
+                "
+              >
+                Role Permissions
+              </router-link>
             </div>
             <div class="flex items-center justify-end w-full">
               <div class="flex items-center">

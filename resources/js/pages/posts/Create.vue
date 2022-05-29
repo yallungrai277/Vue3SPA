@@ -135,7 +135,7 @@ const onSubmit = () => {
     </div>
 
     <!-- Image -->
-    <div class="mt-4">
+    <!-- <div class="mt-4">
       <label for="image" class="block font-medium text-sm text-gray-700">
         Image
       </label>
@@ -154,7 +154,7 @@ const onSubmit = () => {
           {{ message }}
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Buttons -->
     <div class="mt-4">

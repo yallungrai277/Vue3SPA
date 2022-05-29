@@ -11,8 +11,9 @@ use App\Http\Requests\Post\PostUpdateRequest;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $this->authorize('posts.manage');
         $orderColumn = request('order_column', 'created_at');
         $orderDirection = request('order_direction', 'desc');
 
@@ -65,28 +66,29 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        if ($request->hasFile('image')) {
-            $fileName = $request->file('image')->getClientOriginalName();
-            info($fileName);
-        }
-
-        $post = Post::create($request->validated());
+        $this->authorize('posts.create');
+        $post = Post::create($request->validated() + [
+            'user_id' => $request->user()->id
+        ]);
         return response()->json((new PostResource($post)), 201);
     }
 
     public function show(Post $post)
     {
+        $this->authorize('posts.manage');
         return response()->json(new PostResource($post), 200);
     }
 
     public function update(PostUpdateRequest $request, Post $post)
     {
+        $this->authorize('posts.update');
         $post->update($request->validated());
         return response()->json(new PostResource($post->refresh()), 200);
     }
 
     public function destroy(Post $post)
     {
+        $this->authorize('posts.delete');
         $post->delete();
         return response()->noContent();
     }

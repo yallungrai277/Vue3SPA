@@ -2,8 +2,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import publicRoutes from "./public";
 import authRoutes from "./auth";
 import postRoutes from "./posts";
+import rolePermission from "./rolePermission";
 
-const routes = [...publicRoutes, ...authRoutes, ...postRoutes];
+const routes = [
+    ...publicRoutes,
+    ...authRoutes,
+    ...postRoutes,
+    ...rolePermission,
+];
 
 const router = createRouter({
     history: createWebHistory(),

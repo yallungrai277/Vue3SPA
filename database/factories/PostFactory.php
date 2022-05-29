@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -14,11 +15,14 @@ class PostFactory extends Factory
      */
     public function definition()
     {
-        $categoryIds = Category::pluck('id');
-        return [
-            'title' => $this->faker->text(20),
-            'content' => $this->faker->paragraphs(4, true),
-            'category_id' => $categoryIds->random()
-        ];
+        if (User::count()) {
+            $categoryIds = Category::pluck('id');
+            return [
+                'title' => $this->faker->text(20),
+                'content' => $this->faker->paragraphs(4, true),
+                'category_id' => $categoryIds->random(),
+                'user_id' =>  User::all()->random()->id,
+            ];
+        }
     }
 }

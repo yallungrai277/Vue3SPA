@@ -42,8 +42,6 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean',
-
     ];
 
     public function passwordResetToken()
@@ -56,5 +54,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(AuthToken::class)
             ->where('type', AuthToken::VERIFY_EMAIL_TOKEN);
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
     }
 }

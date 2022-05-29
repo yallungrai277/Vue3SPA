@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources\Role;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Permission\PermissionResource;
 
-class UserResource extends JsonResource
+class RoleResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +15,12 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        return  [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
-            'email_verified_at' => $this->email_verified_at->format('Y-m-d H:i:s'),
+            'permissions' => $this->whenLoaded('permissions', function () {;
+                return PermissionResource::collection($this->permissions);
+            })
         ];
     }
 }

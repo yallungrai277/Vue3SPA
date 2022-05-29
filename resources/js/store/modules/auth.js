@@ -1,7 +1,6 @@
 import _ from "lodash";
 import router from "@/routes";
 import { setBearerToken } from "@/helpers";
-import axios from "axios";
 
 // initial state
 const state = () => ({

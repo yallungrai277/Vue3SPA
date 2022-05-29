@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory, PrimaryKeyUuid;
 
     protected $fillable = [
-        'title', 'content', 'category_id'
+        'title', 'content', 'category_id', 'user_id'
     ];
 
     public function category()

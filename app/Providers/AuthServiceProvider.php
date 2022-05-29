@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Permission;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -24,7 +26,17 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        $this->registerPermissionGates();
+    }
 
-        //
+    public function registerPermissionGates()
+    {
+        foreach (Permission::pluck('name') as $permission) {
+            Gate::define($permission, function ($user) use ($permission) {
+                return $user->roles()->whereHas('permissions', function (Builder $query) use ($permission) {
+                    return $query->where('name', $permission);
+                })->first() ? true : false;
+            });
+        }
     }
 }

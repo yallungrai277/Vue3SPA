@@ -14,6 +14,20 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Category::factory(20)->create();
+        $categories = [
+            'education',
+            'science',
+            'technology',
+            'fashion',
+            'sports'
+        ];
+
+        foreach ($categories as $category) {
+            Category::firstOrCreate([
+                'name' => $category
+            ], [
+                'name' => $category
+            ]);
+        }
     }
 }

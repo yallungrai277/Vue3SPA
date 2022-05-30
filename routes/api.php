@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\PermissionRoleController;
 use App\Http\Controllers\Api\RolePermissionController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +36,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('permissions')->group(function () {
         Route::get('/', PermissionController::class);
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::put('update', [ProfileController::class, 'update']);
+        Route::put('change-password', [ProfileController::class, 'changePassword']);
     });
 });

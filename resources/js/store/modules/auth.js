@@ -40,7 +40,7 @@ const actions = {
             commit("SET_USER", res.data.data.user);
 
             setBearerToken(res.data.data.auth_token);
-            router.replace({ name: "posts.index" });
+            router.replace({ name: "dashboard" });
         } catch (err) {
             if (err?.response?.status == 422 && err?.response?.data?.errors) {
                 commit("SET_VALIDATION_ERRORS", err.response.data.errors);

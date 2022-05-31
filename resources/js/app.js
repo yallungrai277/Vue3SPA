@@ -12,6 +12,12 @@ import LaravelVuePagination from "laravel-vue-pagination";
 // Sweet Alert
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import axiosInterceptors from "@/helpers/axiosInterceptors";
+import { ENV } from "@/constants";
+
+if (process.env.MIX_ENV != ENV.LOCAL) {
+    axiosInterceptors();
+}
 
 store
     .dispatch("auth/me", new LocalStorage().getItem("authToken"))

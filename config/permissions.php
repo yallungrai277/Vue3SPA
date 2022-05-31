@@ -7,13 +7,4 @@ return [
         'posts.update',
         'posts.delete'
     ],
-    'categories' => [
-        'categories.manage',
-        'categories.create',
-        'categories.update',
-        'categories.delete'
-    ],
-    'permissions' => [
-        'permissions.manage'
-    ]
 ];

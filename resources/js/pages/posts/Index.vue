@@ -486,6 +486,9 @@ const updateOrdering = (column) => {
               </a>
             </td>
           </tr>
+          <tr v-if="!posts.length">
+            <td colspan="6" class="text-center">No records available</td>
+          </tr>
         </tbody>
       </table>
       <Pagination

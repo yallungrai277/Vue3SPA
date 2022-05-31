@@ -14,6 +14,7 @@ class RolePermissionController extends Controller
 {
     public function index(Request $request)
     {
+
         $roles = Role::with('permissions')->get();
         return response()->json([
             'data' => RoleResource::collection($roles),

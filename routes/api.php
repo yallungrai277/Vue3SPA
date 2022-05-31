@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PermissionController;
-use App\Http\Controllers\Api\PermissionRoleController;
 use App\Http\Controllers\Api\RolePermissionController;
 use App\Http\Controllers\ProfileController;
 
@@ -18,10 +17,6 @@ use App\Http\Controllers\ProfileController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 require __DIR__ . '/api/auth.php';
 

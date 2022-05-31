@@ -2,6 +2,14 @@ const ROLES = {
     ADMIN_ROLE: "admin",
     USER_ROLE: "user",
 };
-Object.freeze(ROLES);
 
-export { ROLES };
+const ENV = {
+    LOCAL: "local",
+    STAGING: "staging",
+    PRODUCTION: "production",
+};
+
+Object.freeze(ROLES);
+Object.freeze(ENV);
+
+export { ROLES, ENV };

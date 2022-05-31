@@ -3,12 +3,14 @@ import publicRoutes from "./public";
 import authRoutes from "./auth";
 import postRoutes from "./posts";
 import rolePermission from "./rolePermission";
+import errors from "./errors";
 
 const routes = [
     ...publicRoutes,
     ...authRoutes,
     ...postRoutes,
     ...rolePermission,
+    ...errors,
 ];
 
 const router = createRouter({

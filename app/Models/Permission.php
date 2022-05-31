@@ -22,10 +22,6 @@ class Permission extends Model
 
     public static function initUserUnallowedPermissionsForSeeding()
     {
-        $permissions = config('permissions');
-        return array_merge([
-            ...$permissions['categories'],
-            ...$permissions['permissions']
-        ], []);
+        return [];
     }
 }

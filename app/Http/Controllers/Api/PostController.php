@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function index(Request $request)
     {
-        $this->authorize('posts.manage');
+        $this->authorize('viewAny', Post::class);
         $orderColumn = request('order_column', 'created_at');
         $orderDirection = request('order_direction', 'desc');
 
@@ -27,6 +27,11 @@ class PostController extends Controller
 
         $posts = Post::query()
             ->with('category:id,name')
+            ->when(($user = $request->user()) != null, function ($query) use ($user) {
+                if ($user->isAdmin())
+                    return;
+                return $query->where('user_id', $user->id);
+            })
             ->when(request('search_category'), function ($query) {
                 $query->where('category_id', request('search_category'));
             })
@@ -66,7 +71,7 @@ class PostController extends Controller
 
     public function store(PostStoreRequest $request)
     {
-        $this->authorize('posts.create');
+        $this->authorize('create', Post::class);
         $post = Post::create($request->validated() + [
             'user_id' => $request->user()->id
         ]);
@@ -75,20 +80,20 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        $this->authorize('posts.manage');
+        $this->authorize('view', $post);
         return response()->json(new PostResource($post), 200);
     }
 
     public function update(PostUpdateRequest $request, Post $post)
     {
-        $this->authorize('posts.update');
+        $this->authorize('update', $post);
         $post->update($request->validated());
         return response()->json(new PostResource($post->refresh()), 200);
     }
 
     public function destroy(Post $post)
     {
-        $this->authorize('posts.delete');
+        $this->authorize('delete', $post);
         $post->delete();
         return response()->noContent();
     }

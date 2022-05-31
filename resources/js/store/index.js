@@ -1,7 +1,8 @@
 import { createStore, createLogger } from "vuex";
 import auth from "@/store/modules/auth";
+import { ENV } from "@/constants";
 
-const isLocal = process.env.MIX_ENV === "local";
+const isLocal = process.env.MIX_ENV === ENV.LOCAL;
 
 const logger = createLogger({
     collapsed: false, // auto-expand logged mutation

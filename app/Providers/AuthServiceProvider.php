@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Permission;
+use App\Models\Post;
+use App\Policies\PostPolicy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -16,6 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Post::class => PostPolicy::class
     ];
 
     /**
@@ -31,12 +34,22 @@ class AuthServiceProvider extends ServiceProvider
 
     public function registerPermissionGates()
     {
-        foreach (Permission::pluck('name') as $permission) {
-            Gate::define($permission, function ($user) use ($permission) {
-                return $user->roles()->whereHas('permissions', function (Builder $query) use ($permission) {
-                    return $query->where('name', $permission);
-                })->first() ? true : false;
-            });
-        }
+        // Global Permission Handler
+
+        // Using trait CheckPermission for now to account for permission and model policy without having to call permission and policy twice.
+
+        // Gate::before(function ($user, $ability) {
+        //     if ($user->isAdmin()) {
+        //         return true;
+        //     }
+        // });
+
+        // foreach (Permission::pluck('name') as $permission) {
+        //     Gate::define($permission, function ($user) use ($permission) {
+        //         return $user->roles()->whereHas('permissions', function (Builder $query) use ($permission) {
+        //             return $query->where('name', $permission);
+        //         })->first() ? true : false;
+        //     });
+        // }
     }
 }

@@ -197,6 +197,7 @@ function updatePassword() {
           <input
             id="password"
             type="password"
+            autocomplete="off"
             class="
               block
               mt-1
@@ -228,7 +229,8 @@ function updatePassword() {
             Password Confirmation
           </label>
           <input
-            id="password"
+            id="password_confirmation"
+            autocomplete="off"
             type="password"
             class="
               block

@@ -8,13 +8,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RolePermission\RolePermissionUpdateRequest;
 use App\Http\Resources\Role\RoleResource;
 use DomainException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RolePermissionController extends Controller
 {
     public function index(Request $request)
     {
-
+        $this->authorize('isAdmin');
         $roles = Role::with('permissions')->get();
         return response()->json([
             'data' => RoleResource::collection($roles),
@@ -24,8 +23,8 @@ class RolePermissionController extends Controller
 
     public function update(RolePermissionUpdateRequest $request)
     {
+        $this->authorize('isAdmin');
         $data = $request->validated()['roles_permission'];
-
         $roleId = Role::where('name', Role::ADMIN_ROLE)->value('id');
         if (is_null($roleId)) {
             throw new DomainException('The server is not configured properly to handle roles and permissions. Please contact admin.');

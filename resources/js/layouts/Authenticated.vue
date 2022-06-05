@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useActions, useGetters } from "vuex-composition-helpers";
 
@@ -12,9 +12,11 @@ const { logout } = useActions({
   logout: "auth/logout",
 });
 
-const { isSubmitting, user } = useGetters({
+const { isSubmitting, user, isAdmin, isUser } = useGetters({
   isSubmitting: "auth/isSubmitting",
   user: "auth/user",
+  isAdmin: "auth/isAdmin",
+  isUser: "auth/isUser",
 });
 </script>
 <template>
@@ -104,6 +106,7 @@ const { isSubmitting, user } = useGetters({
               <router-link
                 :to="{ name: 'rolePermissions.index' }"
                 active-class="border-b-2 border-indigo-400"
+                v-if="isAdmin"
                 class="
                   inline-flex
                   items-center

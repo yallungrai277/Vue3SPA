@@ -1,6 +1,6 @@
 # VUE3 SPA
 
-This is a vue 3 spa project using composition api with laravel backend api.
+This is a vue 3 spa project using composition api with laravel backend api. Comprises of permissions, model policies along with vue frontend protection.
 
 #### `Laravel 8.75`
 

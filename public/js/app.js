@@ -21571,10 +21571,14 @@ __webpack_require__.r(__webpack_exports__);
 
     var _useGetters = (0,vuex_composition_helpers__WEBPACK_IMPORTED_MODULE_1__.useGetters)({
       isSubmitting: "auth/isSubmitting",
-      user: "auth/user"
+      user: "auth/user",
+      isAdmin: "auth/isAdmin",
+      isUser: "auth/isUser"
     }),
         isSubmitting = _useGetters.isSubmitting,
-        user = _useGetters.user;
+        user = _useGetters.user,
+        isAdmin = _useGetters.isAdmin,
+        isUser = _useGetters.isUser;
 
     var __returned__ = {
       route: route,
@@ -21582,7 +21586,10 @@ __webpack_require__.r(__webpack_exports__);
       logout: logout,
       isSubmitting: isSubmitting,
       user: user,
+      isAdmin: isAdmin,
+      isUser: isUser,
       computed: vue__WEBPACK_IMPORTED_MODULE_0__.computed,
+      onMounted: vue__WEBPACK_IMPORTED_MODULE_0__.onMounted,
       useRoute: vue_router__WEBPACK_IMPORTED_MODULE_2__.useRoute,
       useActions: vuex_composition_helpers__WEBPACK_IMPORTED_MODULE_1__.useActions,
       useGetters: vuex_composition_helpers__WEBPACK_IMPORTED_MODULE_1__.useGetters
@@ -22707,7 +22714,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+  , ["to"]), $setup.isAdmin ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_router_link, {
+    key: 0,
     to: {
       name: 'rolePermissions.index'
     },
@@ -22722,7 +22730,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["to"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Hi, " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$setup$user = $setup.user) === null || _$setup$user === void 0 ? void 0 : _$setup$user.name), 1
+  , ["to"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Hi, " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$setup$user = $setup.user) === null || _$setup$user === void 0 ? void 0 : _$setup$user.name), 1
   /* TEXT */
   ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$setup$user2 = $setup.user) === null || _$setup$user2 === void 0 ? void 0 : _$setup$user2.email), 1
   /* TEXT */
@@ -23023,6 +23031,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Password "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     id: "password",
     type: "password",
+    autocomplete: "off",
     "class": "block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50",
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $setup.passwordForm.password = $event;
@@ -23038,7 +23047,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128
   /* KEYED_FRAGMENT */
   ))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [_hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
-    id: "password",
+    id: "password_confirmation",
+    autocomplete: "off",
     type: "password",
     "class": "block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50",
     "onUpdate:modelValue": _cache[3] || (_cache[3] = function ($event) {
@@ -24614,6 +24624,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 if ("local" != _constants__WEBPACK_IMPORTED_MODULE_9__.ENV.LOCAL) {
+  //run only on non local environments
   (0,_helpers_axiosInterceptors__WEBPACK_IMPORTED_MODULE_8__["default"])();
 }
 
@@ -25157,6 +25168,7 @@ __webpack_require__.r(__webpack_exports__);
   }, function (error) {
     switch (error.response.status) {
       case 404:
+        alert("her");
         _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
           name: "404"
         });
@@ -25416,7 +25428,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "authenticated": () => (/* binding */ authenticated),
-/* harmony export */   "guest": () => (/* binding */ guest)
+/* harmony export */   "guest": () => (/* binding */ guest),
+/* harmony export */   "isAdmin": () => (/* binding */ isAdmin),
+/* harmony export */   "isUser": () => (/* binding */ isUser)
 /* harmony export */ });
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.js");
 
@@ -25440,7 +25454,31 @@ var guest = function guest(to, from, next) {
     next();
   } else {
     next({
-      name: "posts.index"
+      name: "dashboard"
+    });
+  }
+};
+
+var isAdmin = function isAdmin(to, from, next) {
+  var isAdmin = _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters["auth/isAdmin"];
+
+  if (isAdmin) {
+    next();
+  } else {
+    next({
+      name: "dashboard"
+    });
+  }
+};
+
+var isUser = function isUser(to, from, next) {
+  var isUser = _store__WEBPACK_IMPORTED_MODULE_0__["default"].getters["auth/isUser"];
+
+  if (isUser) {
+    next();
+  } else {
+    next({
+      name: "dashboard"
     });
   }
 };
@@ -25603,7 +25641,7 @@ __webpack_require__.r(__webpack_exports__);
     layout: _layouts_Authenticated_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     title: "Role Permission"
   },
-  beforeEnter: [_guards__WEBPACK_IMPORTED_MODULE_0__.authenticated]
+  beforeEnter: [_guards__WEBPACK_IMPORTED_MODULE_0__.authenticated, _guards__WEBPACK_IMPORTED_MODULE_0__.isAdmin]
 }]);
 
 /***/ }),
@@ -25661,11 +25699,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/routes */ "./resources/js/routes/index.js");
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/helpers */ "./resources/js/helpers/index.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/constants */ "./resources/js/constants/index.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -25693,6 +25733,28 @@ var getters = {
   },
   authenticated: function authenticated(state) {
     if (state.authToken && state.user != null) return true;
+    return false;
+  },
+  isAdmin: function isAdmin(state, getters) {
+    if (!getters.authenticated) return false;
+
+    if (state.user.roles && state.user.roles.some(function (role) {
+      return role.name === _constants__WEBPACK_IMPORTED_MODULE_4__.ROLES.ADMIN_ROLE;
+    })) {
+      return true;
+    }
+
+    return false;
+  },
+  isUser: function isUser(state, getters) {
+    if (!getters.authenticated) return false;
+
+    if (state.user.roles && state.user.roles.some(function (role) {
+      return role.name === _constants__WEBPACK_IMPORTED_MODULE_4__.ROLES.USER_ROLE;
+    })) {
+      return true;
+    }
+
     return false;
   }
 }; // actions

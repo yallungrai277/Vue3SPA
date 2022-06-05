@@ -1,6 +1,7 @@
 import _ from "lodash";
 import router from "@/routes";
 import { setBearerToken } from "@/helpers";
+import { ROLES } from "@/constants";
 
 // initial state
 const state = () => ({
@@ -23,6 +24,26 @@ const getters = {
     },
     authenticated(state) {
         if (state.authToken && state.user != null) return true;
+        return false;
+    },
+    isAdmin(state, getters) {
+        if (!getters.authenticated) return false;
+        if (
+            state.user.roles &&
+            state.user.roles.some((role) => role.name === ROLES.ADMIN_ROLE)
+        ) {
+            return true;
+        }
+        return false;
+    },
+    isUser(state, getters) {
+        if (!getters.authenticated) return false;
+        if (
+            state.user.roles &&
+            state.user.roles.some((role) => role.name === ROLES.USER_ROLE)
+        ) {
+            return true;
+        }
         return false;
     },
 };

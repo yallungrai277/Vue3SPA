@@ -8,6 +8,7 @@ export default function () {
         function (error) {
             switch (error.response.status) {
                 case 404:
+                    alert("her");
                     router.push({ name: "404" });
                     break;
                 case 500:

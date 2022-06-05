@@ -16,6 +16,7 @@ import axiosInterceptors from "@/helpers/axiosInterceptors";
 import { ENV } from "@/constants";
 
 if (process.env.MIX_ENV != ENV.LOCAL) {
+    //run only on non local environments
     axiosInterceptors();
 }
 

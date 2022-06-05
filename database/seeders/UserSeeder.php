@@ -20,14 +20,14 @@ class UserSeeder extends Seeder
             $admin = User::factory()->create([
                 'name' => 'Admin user',
                 'email' => 'admin@gmail.com',
-                'password' => Hash::make('Password123!'),
+                'password' => 'Password123!',
             ]);
 
             $admin->roles()->attach(Role::where('name', Role::ADMIN_ROLE)->value('id'));
         }
 
         $user = User::factory()->create([
-            'password' => Hash::make('Password123!')
+            'password' => 'Password123!'
         ]);
 
         $user->roles()->attach(Role::where('name', Role::USER_ROLE)->value('id'));

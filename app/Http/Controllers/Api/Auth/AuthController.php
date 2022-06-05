@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\AuthToken;
 use Illuminate\Http\Request;
@@ -43,20 +44,27 @@ class AuthController extends Controller
             'data' => [
                 'status' => true,
                 'auth_token' => $token,
-                'user' => (new UserResource($user)),
+                'user' => (new UserResource($user->load([
+                    'roles'
+                ]))),
             ]
         ], 200);
     }
 
     public function register(RegisterRequest $request)
     {
-        $user = User::create($request->validated() + [
-            'is_admin' => 0
-        ]);
+        $userRole = Role::where('name', Role::USER_ROLE)->first();
+        if (!$userRole) {
+            throw new ModelNotFoundException('Role not found. Please contact admin');
+        }
+        $user = User::create($request->validated());
+        $user->roles()->attach($userRole->id);
 
         $authToken = $this->helper->createToken($user, AuthToken::VERIFY_EMAIL_TOKEN);
         Notification::send($user, new AuthNotification($authToken));
-        return response()->json((new UserResource($user)), 201);
+        return response()->json((new UserResource($user->load([
+            'roles'
+        ]))), 201);
     }
 
     public function resetPassword(ForgotPasswordRequest $request)
@@ -115,7 +123,9 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json([
-            'data' => (new UserResource($request->user())),
+            'data' => (new UserResource($request->user()->load([
+                'roles'
+            ]))),
             'status' => true
         ]);
     }

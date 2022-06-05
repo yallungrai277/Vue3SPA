@@ -1,4 +1,4 @@
-import { authenticated } from "./guards";
+import { authenticated, isAdmin } from "./guards";
 import Authenticated from "@/layouts/Authenticated.vue";
 
 import RolePermissionIndex from "@/pages/role-permission/Index";
@@ -12,6 +12,6 @@ export default [
             layout: Authenticated,
             title: "Role Permission",
         },
-        beforeEnter: [authenticated],
+        beforeEnter: [authenticated, isAdmin],
     },
 ];

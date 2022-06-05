@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import authRouterChange from "@/composables/authRouterChange";
 import { useActions, useGetters, useMutations } from "vuex-composition-helpers";
 
@@ -65,7 +65,7 @@ authRouterChange();
             v-for="(message, index) in validationErrors?.email"
             :key="`email-${index}`"
           >
-            {{ message }}
+            <p v-html="message"></p>
           </div>
         </div>
       </div>

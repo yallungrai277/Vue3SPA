@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\AuthToken;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
+use DomainException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AuthController extends Controller
@@ -32,6 +34,13 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
+
+        if (is_null($user->email_verified_at)) {
+            throw ValidationException::withMessages([
+                'email' => 'Your email is not verified.
+                Please click <a style="color:blue !important" href="' . config('app.frontend_app_url') . '/verify-email">here</a> to resend verification email.'
+            ]);
+        }
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

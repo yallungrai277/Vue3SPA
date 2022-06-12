@@ -9,7 +9,15 @@ const ENV = {
     PRODUCTION: "production",
 };
 
+const PERMISSIONS = {
+    POSTS_MANAGE: "posts.manage",
+    POSTS_CREATE: "posts.create",
+    POSTS_UPDATE: "posts.update",
+    POSTS_DELETE: "posts.delete",
+};
+
 Object.freeze(ROLES);
 Object.freeze(ENV);
+Object.freeze(PERMISSIONS);
 
-export { ROLES, ENV };
+export { ROLES, PERMISSIONS, ENV };

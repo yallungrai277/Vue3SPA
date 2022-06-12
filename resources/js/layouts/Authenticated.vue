@@ -1,4 +1,6 @@
 <script setup>
+import { can } from "@/helpers/can";
+import { PERMISSIONS } from "@/constants";
 import { computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useActions, useGetters } from "vuex-composition-helpers";
@@ -66,6 +68,7 @@ const { isSubmitting, user, isAdmin, isUser } = useGetters({
               <router-link
                 :to="{ name: 'posts.index' }"
                 active-class="border-b-2 border-indigo-400"
+                v-if="can(PERMISSIONS.POSTS_MANAGE)"
                 class="
                   inline-flex
                   items-center
@@ -86,6 +89,7 @@ const { isSubmitting, user, isAdmin, isUser } = useGetters({
               <router-link
                 :to="{ name: 'posts.create' }"
                 active-class="border-b-2 border-indigo-400"
+                v-if="can(PERMISSIONS.POSTS_CREATE)"
                 class="
                   inline-flex
                   items-center

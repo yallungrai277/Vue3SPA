@@ -2,6 +2,7 @@ import _ from "lodash";
 import router from "@/routes";
 import { setBearerToken } from "@/helpers";
 import { ROLES } from "@/constants";
+import userPermission from "@/composables/userPermission";
 
 // initial state
 const state = () => ({
@@ -9,6 +10,7 @@ const state = () => ({
     user: null,
     validationErrors: {},
     isSubmitting: false,
+    permissions: [],
 });
 
 // getters
@@ -46,11 +48,15 @@ const getters = {
         }
         return false;
     },
+
+    permissions(state) {
+        return state.permissions;
+    },
 };
 
 // actions
 const actions = {
-    async login({ commit, state }, payload) {
+    async login({ commit, state, dispatch }, payload) {
         if (state.isSubmitting) return;
 
         commit("SET_SUBMITTING", true);
@@ -61,6 +67,7 @@ const actions = {
             commit("SET_USER", res.data.data.user);
 
             setBearerToken(res.data.data.auth_token);
+            dispatch("fetchAndSetPermissions");
             router.replace({ name: "dashboard" });
         } catch (err) {
             if (err?.response?.status == 422 && err?.response?.data?.errors) {
@@ -78,16 +85,34 @@ const actions = {
             setBearerToken(token);
             const res = await axios.get("api/auth/me");
             commit("SET_USER", res.data.data);
+
+            dispatch("fetchAndSetPermissions");
         } catch (err) {
             dispatch("clearAuth");
         }
         return;
     },
 
+    async fetchAndSetPermissions({ commit }) {
+        const { getUserPermission, permissions } = userPermission();
+        try {
+            await getUserPermission();
+
+            commit("SET_PERMISSIONS", permissions.value);
+        } catch (err) {
+            console.log("some errors occured");
+            // console.log(err);
+        }
+    },
+
     clearAuth({ commit }) {
         commit("SET_AUTH_TOKEN", null);
         commit("SET_USER", null);
         setBearerToken();
+    },
+
+    removePermissions({ commit }) {
+        commit("REMOVE_PERMISSIONS");
     },
 
     async register({ commit, state }, payload) {
@@ -116,6 +141,7 @@ const actions = {
         try {
             await axios.post("api/auth/logout");
             commit("SET_SUBMITTING", false);
+            dispatch("removePermissions");
             dispatch("clearAuth");
 
             router.push({ name: "login" });
@@ -240,6 +266,16 @@ const mutations = {
     },
     SET_SUBMITTING(state, boolean) {
         state.isSubmitting = boolean;
+    },
+    SET_PERMISSIONS(state, permissions) {
+        let tempPermission = [];
+        permissions.forEach((permission) => {
+            tempPermission.push(permission.name);
+        });
+        state.permissions = tempPermission;
+    },
+    REMOVE_PERMISSIONS(state) {
+        state.permissions = [];
     },
 };
 

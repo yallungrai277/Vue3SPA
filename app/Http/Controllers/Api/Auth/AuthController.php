@@ -35,7 +35,7 @@ class AuthController extends Controller
     {
         $user = User::where('email', $request->email)->first();
 
-        if (is_null($user->email_verified_at)) {
+        if ($user && is_null($user->email_verified_at)) {
             throw ValidationException::withMessages([
                 'email' => 'Your email is not verified.
                 Please click <a style="color:blue !important" href="' . config('app.frontend_app_url') . '/verify-email">here</a> to resend verification email.'

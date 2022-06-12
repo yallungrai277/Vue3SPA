@@ -1,7 +1,11 @@
 <script setup>
+import { can } from "@/helpers/can";
+import { PERMISSIONS } from "@/constants";
+import usePosts from "@/composables/posts";
 import { ref, onMounted, watch } from "vue";
-import usePosts from "../../composables/posts";
-import { useCategories } from "../../composables/categories";
+import { useGetters } from "vuex-composition-helpers";
+import { useCategories } from "@/composables/categories";
+
 // defining props
 // const props = defineProps({});
 
@@ -19,6 +23,9 @@ const orderDirection = ref("desc");
 const { posts, getPosts, deletePost } = usePosts();
 const { categories, getCategories } = useCategories();
 
+const { permissions } = useGetters({
+  permissions: "auth/permissions",
+});
 /////////// lifecycle hooks ///////////
 
 onMounted(() => {
@@ -479,9 +486,15 @@ const updateOrdering = (column) => {
                   name: 'posts.edit',
                   params: { id: post.id },
                 }"
+                v-if="can(PERMISSIONS.POSTS_UPDATE)"
                 >Edit
               </router-link>
-              <a href="#" @click.prevent="deletePost(post.id)" class="ml-2">
+              <a
+                href="#"
+                @click.prevent="deletePost(post.id)"
+                class="ml-2"
+                v-if="can(PERMISSIONS.POSTS_DELETE)"
+              >
                 Delete
               </a>
             </td>

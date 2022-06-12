@@ -15,10 +15,10 @@ import "sweetalert2/dist/sweetalert2.min.css";
 import axiosInterceptors from "@/helpers/axiosInterceptors";
 import { ENV } from "@/constants";
 
-if (process.env.MIX_ENV != ENV.LOCAL) {
-    //run only on non local environments
-    axiosInterceptors();
-}
+// if (process.env.MIX_ENV != ENV.LOCAL) {
+//run only on non local environments
+axiosInterceptors();
+// }
 
 store
     .dispatch("auth/me", new LocalStorage().getItem("authToken"))

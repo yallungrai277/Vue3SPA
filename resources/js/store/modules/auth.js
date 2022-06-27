@@ -3,10 +3,13 @@ import router from "@/routes";
 import { setBearerToken } from "@/helpers";
 import { ROLES } from "@/constants";
 import userPermission from "@/composables/userPermission";
+import { setRefreshToken } from "@/helpers";
+import LocalStorage from "@/helpers/localstorage";
 
 // initial state
 const state = () => ({
     authToken: null,
+    refreshToken: null,
     user: null,
     validationErrors: {},
     isSubmitting: false,
@@ -52,6 +55,10 @@ const getters = {
     permissions(state) {
         return state.permissions;
     },
+
+    refreshToken(state) {
+        return state.refreshToken;
+    },
 };
 
 // actions
@@ -64,9 +71,10 @@ const actions = {
         try {
             const res = await axios.post("api/auth/login", payload);
             commit("SET_AUTH_TOKEN", res.data.data.auth_token);
+            if (res.data.data.refresh_token) {
+                commit("SET_REFRESH_TOKEN", res.data.data.refresh_token);
+            }
             commit("SET_USER", res.data.data.user);
-
-            setBearerToken(res.data.data.auth_token);
             dispatch("fetchAndSetPermissions");
             router.replace({ name: "dashboard" });
         } catch (err) {
@@ -78,11 +86,8 @@ const actions = {
         return;
     },
 
-    async me({ commit, state, dispatch }, token) {
+    async me({ commit, state, dispatch }) {
         try {
-            commit("SET_AUTH_TOKEN", token);
-            if (!state.authToken) return;
-            setBearerToken(token);
             const res = await axios.get("api/auth/me");
             commit("SET_USER", res.data.data);
 
@@ -107,8 +112,8 @@ const actions = {
 
     clearAuth({ commit }) {
         commit("SET_AUTH_TOKEN", null);
+        commit("SET_REFRESH_TOKEN", null);
         commit("SET_USER", null);
-        setBearerToken();
     },
 
     removePermissions({ commit }) {
@@ -253,7 +258,12 @@ const actions = {
 // mutations
 const mutations = {
     SET_AUTH_TOKEN(state, token) {
-        state.authToken = token;
+        setBearerToken(token);
+        return (state.authToken = token);
+    },
+    SET_REFRESH_TOKEN(state, refreshToken) {
+        setRefreshToken(refreshToken);
+        return (state.refreshToken = refreshToken);
     },
     SET_USER(state, user) {
         state.user = user;

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\AuthToken;
@@ -18,8 +17,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
-use DomainException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use MohamedGaber\SanctumRefreshToken\Models\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -48,11 +47,14 @@ class AuthController extends Controller
             ]);
         }
 
-        $token = $user->createToken('web')->plainTextToken;
+
+        $token = $user->createAuthToken('web', config('app.access_token_expires_at'))->plainTextToken;
+        $refreshToken = $user->createRefreshToken('web', config('app.refresh_token_expires_at'))->plainTextToken;
         return response()->json([
             'data' => [
                 'status' => true,
                 'auth_token' => $token,
+                'refresh_token' => $refreshToken,
                 'user' => (new UserResource($user->load([
                     'roles'
                 ]))),
@@ -137,5 +139,18 @@ class AuthController extends Controller
             ]))),
             'status' => true
         ]);
+    }
+
+    public function refreshToken(Request $request)
+    {
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
+        $user->deleteExpiredAccessToken();
+        return response()->json([
+            'data' => [
+                'auth_token' => $user->createAuthToken('web', config('app.access_token_expires_at'))->plainTextToken,
+                'refresh_token' => $user->createRefreshToken('web', config('app.refresh_token_expires_at'))->plainTextToken,
+            ]
+        ], 200);
     }
 }

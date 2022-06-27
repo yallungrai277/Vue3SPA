@@ -24634,7 +24634,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var sweetalert2_dist_sweetalert2_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2/dist/sweetalert2.min.css */ "./node_modules/sweetalert2/dist/sweetalert2.min.css");
 /* harmony import */ var _helpers_axiosInterceptors__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/helpers/axiosInterceptors */ "./resources/js/helpers/axiosInterceptors.js");
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/constants */ "./resources/js/constants/index.js");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -24648,12 +24647,10 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
- // if (process.env.MIX_ENV != ENV.LOCAL) {
-//run only on non local environments
-
-(0,_helpers_axiosInterceptors__WEBPACK_IMPORTED_MODULE_8__["default"])(); // }
-
-_store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("auth/me", new _helpers_localstorage__WEBPACK_IMPORTED_MODULE_4__["default"]().getItem("authToken"))["finally"](function () {
+(0,_helpers_axiosInterceptors__WEBPACK_IMPORTED_MODULE_8__["default"])();
+_store__WEBPACK_IMPORTED_MODULE_3__["default"].commit("auth/SET_AUTH_TOKEN", new _helpers_localstorage__WEBPACK_IMPORTED_MODULE_4__["default"]().getItem("authToken"));
+_store__WEBPACK_IMPORTED_MODULE_3__["default"].commit("auth/SET_REFRESH_TOKEN", new _helpers_localstorage__WEBPACK_IMPORTED_MODULE_4__["default"]().getItem("refreshToken"));
+_store__WEBPACK_IMPORTED_MODULE_3__["default"].dispatch("auth/me")["finally"](function () {
   var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)(_App_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
   app.use(_routes__WEBPACK_IMPORTED_MODULE_2__["default"]);
   app.use(_store__WEBPACK_IMPORTED_MODULE_3__["default"]);
@@ -24736,9 +24733,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -24747,26 +24742,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 function useCategories() {
-  var categories = (0,vue__WEBPACK_IMPORTED_MODULE_2__.ref)([]);
+  var categories = (0,vue__WEBPACK_IMPORTED_MODULE_1__.ref)([]);
 
   var getCategories = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var _response$data, response;
+
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/categories").then(function (response) {
-                categories.value = response.data.data;
-              });
+              _context.prev = 0;
+              _context.next = 3;
+              return axios.get("/api/categories");
 
-            case 1:
+            case 3:
+              response = _context.sent;
+              categories.value = (_response$data = response.data) === null || _response$data === void 0 ? void 0 : _response$data.data;
+              _context.next = 9;
+              break;
+
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](0);
+
+            case 9:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 7]]);
     }));
 
     return function getCategories() {
@@ -25207,6 +25213,26 @@ function userPermission() {
 
 /***/ }),
 
+/***/ "./resources/js/constants/api.js":
+/*!***************************************!*\
+  !*** ./resources/js/constants/api.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var APIS = {
+  AUTH: {
+    refreshToken: "api/auth/refresh-token"
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (APIS);
+
+/***/ }),
+
 /***/ "./resources/js/constants/index.js":
 /*!*****************************************!*\
   !*** ./resources/js/constants/index.js ***!
@@ -25254,35 +25280,111 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/routes */ "./resources/js/routes/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/store */ "./resources/js/store/index.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/helpers */ "./resources/js/helpers/index.js");
+/* harmony import */ var _constants_api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/constants/api */ "./resources/js/constants/api.js");
+
+
+
+
+var isRefreshing = false;
+var failedQueue = [];
+
+var processQueue = function processQueue(error) {
+  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  failedQueue.forEach(function (prom) {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
 
 /* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__() {
   axios.interceptors.response.use(function (response) {
     return response;
   }, function (error) {
-    switch (error.response.status) {
-      case 404:
-        alert("her");
-        _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-          name: "404"
-        });
-        break;
+    var originalRequest = error.config;
+    var refreshToken = _store__WEBPACK_IMPORTED_MODULE_1__["default"].getters["auth/refreshToken"];
 
-      case 500:
+    if (error.response.status === 401) {
+      if (originalRequest._retry) {
+        _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("auth/clearAuth");
         _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-          name: "500"
+          name: "login"
         });
-        break;
+        return Promise.reject(error);
+      }
 
-      case 403:
+      if (!refreshToken) {
+        _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("auth/clearAuth");
         _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
-          name: "403"
+          name: "login"
         });
-        break;
+        return Promise.reject(error);
+      }
 
-      default:
+      if (originalRequest.url === _constants_api__WEBPACK_IMPORTED_MODULE_3__["default"].AUTH.refreshToken) {
+        _store__WEBPACK_IMPORTED_MODULE_1__["default"].dispatch("auth/clearAuth");
+        location.replace(window.location.origin + "/login");
+        return error;
+      }
+
+      if (isRefreshing) {
+        return new Promise(function (resolve, reject) {
+          failedQueue.push({
+            resolve: resolve,
+            reject: reject
+          });
+        }).then(function (token) {
+          originalRequest.headers["Authorization"] = "Bearer " + token;
+          return axios(originalRequest);
+        })["catch"](function (err) {
+          return Promise.reject(err);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+      return new Promise(function (resolve, reject) {
+        (0,_helpers__WEBPACK_IMPORTED_MODULE_2__.setBearerToken)(refreshToken);
+        axios.post(_constants_api__WEBPACK_IMPORTED_MODULE_3__["default"].AUTH.refreshToken).then(function (res) {
+          if (!res.data) {
+            return;
+          }
+
+          _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit("auth/SET_AUTH_TOKEN", res.data.data.auth_token);
+          _store__WEBPACK_IMPORTED_MODULE_1__["default"].commit("auth/SET_REFRESH_TOKEN", res.data.data.refresh_token);
+          originalRequest.headers["Authorization"] = "Bearer " + res.data.data.auth_token;
+          processQueue(null, res.data.data.auth_token);
+          resolve(axios(originalRequest));
+        })["catch"](function (err) {
+          processQueue(err, null);
+          reject(err);
+        })["finally"](function () {
+          isRefreshing = false;
+        });
+      });
+    } else if (error.response.status === 404) {
+      _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+        name: "404"
+      });
+      return Promise.reject(error);
+    } else if (error.response.status === 500) {
+      _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+        name: "500"
+      });
+      return Promise.reject(error);
+    } else if (error.response.status === 403) {
+      _routes__WEBPACK_IMPORTED_MODULE_0__["default"].push({
+        name: "403"
+      });
+      return Promise.reject(error);
+    } else {
+      return Promise.reject(error);
     }
-
-    return Promise.reject(error);
   });
 }
 
@@ -25322,14 +25424,14 @@ var can = function can() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "setBearerToken": () => (/* binding */ setBearerToken)
+/* harmony export */   "setBearerToken": () => (/* binding */ setBearerToken),
+/* harmony export */   "setRefreshToken": () => (/* binding */ setRefreshToken)
 /* harmony export */ });
 /* harmony import */ var _localstorage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./localstorage */ "./resources/js/helpers/localstorage.js");
 
+var storage = new _localstorage__WEBPACK_IMPORTED_MODULE_0__["default"]();
 
 var setBearerToken = function setBearerToken(token) {
-  var storage = new _localstorage__WEBPACK_IMPORTED_MODULE_0__["default"]();
-
   if (!token) {
     storage.removeItem("authToken");
     return axios.defaults.headers.common["Authorization"] = "Bearer ";
@@ -25337,6 +25439,14 @@ var setBearerToken = function setBearerToken(token) {
 
   storage.setItem("authToken", token);
   return axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+};
+
+var setRefreshToken = function setRefreshToken(token) {
+  if (!token) {
+    return storage.removeItem("refreshToken");
+  }
+
+  return storage.setItem("refreshToken", token);
 };
 
 
@@ -25819,6 +25929,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/helpers */ "./resources/js/helpers/index.js");
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/constants */ "./resources/js/constants/index.js");
 /* harmony import */ var _composables_userPermission__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/composables/userPermission */ "./resources/js/composables/userPermission.js");
+/* harmony import */ var _helpers_localstorage__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/helpers/localstorage */ "./resources/js/helpers/localstorage.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -25829,11 +25940,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
+
  // initial state
 
 var state = function state() {
   return {
     authToken: null,
+    refreshToken: null,
     user: null,
     validationErrors: {},
     isSubmitting: false,
@@ -25880,6 +25994,9 @@ var getters = {
   },
   permissions: function permissions(state) {
     return state.permissions;
+  },
+  refreshToken: function refreshToken(state) {
+    return state.refreshToken;
   }
 }; // actions
 
@@ -25911,8 +26028,12 @@ var actions = {
             case 8:
               res = _context.sent;
               commit("SET_AUTH_TOKEN", res.data.data.auth_token);
+
+              if (res.data.data.refresh_token) {
+                commit("SET_REFRESH_TOKEN", res.data.data.refresh_token);
+              }
+
               commit("SET_USER", res.data.data.user);
-              (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.setBearerToken)(res.data.data.auth_token);
               dispatch("fetchAndSetPermissions");
               _routes__WEBPACK_IMPORTED_MODULE_2__["default"].replace({
                 name: "dashboard"
@@ -25941,7 +26062,7 @@ var actions = {
       }, _callee, null, [[5, 16]]);
     }))();
   },
-  me: function me(_ref2, token) {
+  me: function me(_ref2) {
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
       var commit, state, dispatch, res;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
@@ -25950,41 +26071,30 @@ var actions = {
             case 0:
               commit = _ref2.commit, state = _ref2.state, dispatch = _ref2.dispatch;
               _context2.prev = 1;
-              commit("SET_AUTH_TOKEN", token);
-
-              if (state.authToken) {
-                _context2.next = 5;
-                break;
-              }
-
-              return _context2.abrupt("return");
-
-            case 5:
-              (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.setBearerToken)(token);
-              _context2.next = 8;
+              _context2.next = 4;
               return axios.get("api/auth/me");
 
-            case 8:
+            case 4:
               res = _context2.sent;
               commit("SET_USER", res.data.data);
               dispatch("fetchAndSetPermissions");
-              _context2.next = 16;
+              _context2.next = 12;
               break;
 
-            case 13:
-              _context2.prev = 13;
+            case 9:
+              _context2.prev = 9;
               _context2.t0 = _context2["catch"](1);
               dispatch("clearAuth");
 
-            case 16:
+            case 12:
               return _context2.abrupt("return");
 
-            case 17:
+            case 13:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[1, 13]]);
+      }, _callee2, null, [[1, 9]]);
     }))();
   },
   fetchAndSetPermissions: function fetchAndSetPermissions(_ref3) {
@@ -26022,8 +26132,8 @@ var actions = {
   clearAuth: function clearAuth(_ref4) {
     var commit = _ref4.commit;
     commit("SET_AUTH_TOKEN", null);
+    commit("SET_REFRESH_TOKEN", null);
     commit("SET_USER", null);
-    (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.setBearerToken)();
   },
   removePermissions: function removePermissions(_ref5) {
     var commit = _ref5.commit;
@@ -26353,7 +26463,12 @@ var actions = {
 
 var mutations = {
   SET_AUTH_TOKEN: function SET_AUTH_TOKEN(state, token) {
-    state.authToken = token;
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.setBearerToken)(token);
+    return state.authToken = token;
+  },
+  SET_REFRESH_TOKEN: function SET_REFRESH_TOKEN(state, refreshToken) {
+    (0,_helpers__WEBPACK_IMPORTED_MODULE_3__.setRefreshToken)(refreshToken);
+    return state.refreshToken = refreshToken;
   },
   SET_USER: function SET_USER(state, user) {
     state.user = user;

@@ -1,7 +1,7 @@
 import LocalStorage from "./localstorage";
 
+const storage = new LocalStorage();
 const setBearerToken = (token) => {
-    const storage = new LocalStorage();
     if (!token) {
         storage.removeItem("authToken");
         return (axios.defaults.headers.common["Authorization"] = "Bearer ");
@@ -11,4 +11,11 @@ const setBearerToken = (token) => {
     return (axios.defaults.headers.common["Authorization"] = "Bearer " + token);
 };
 
-export { setBearerToken };
+const setRefreshToken = (token) => {
+    if (!token) {
+        return storage.removeItem("refreshToken");
+    }
+    return storage.setItem("refreshToken", token);
+};
+
+export { setBearerToken, setRefreshToken };

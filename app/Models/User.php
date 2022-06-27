@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
+use MohamedGaber\SanctumRefreshToken\Models\PersonalAccessToken;
+use MohamedGaber\SanctumRefreshToken\Traits\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -82,5 +83,13 @@ class User extends Authenticatable
         return $this->roles()
             ->where('name', Role::USER_ROLE)
             ->exists($this->id);
+    }
+
+    public function deleteExpiredAccessToken()
+    {
+        return PersonalAccessToken::where('expired_at', '<', now())
+            ->where('tokenable_id', $this->id)
+            ->where('tokenable_type', User::class)
+            ->delete();
     }
 }

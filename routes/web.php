@@ -13,6 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/{any?}', 'index')->name('index')
+Route::view('/{any?}', 'index')
     ->where('any', '.*')
     ->name('app.index');

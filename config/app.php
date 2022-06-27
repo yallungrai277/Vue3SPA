@@ -236,4 +236,8 @@ return [
     //Frontend App Url
     'frontend_app_url' => env('FRONTEND_APP_URL', 'http://localhost'),
 
+    'access_token_expires_at' => env('ACCESS_TOKEN_EXPIRES_AT', 120),
+
+    'refresh_token_expires_at' => env('REFRESH_TOKEN_EXPIRES_AT', 360)
+
 ];

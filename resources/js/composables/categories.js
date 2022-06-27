@@ -1,13 +1,13 @@
-import axios from "axios";
 import { ref } from "vue";
 
 function useCategories() {
     const categories = ref([]);
 
     const getCategories = async () => {
-        axios.get("/api/categories").then((response) => {
-            categories.value = response.data.data;
-        });
+        try {
+            const response = await axios.get("/api/categories");
+            categories.value = response.data?.data;
+        } catch (err) {}
     };
 
     return {
